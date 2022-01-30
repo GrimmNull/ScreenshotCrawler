@@ -19,6 +19,10 @@ body {
 
   }
 
+  & .redirectArrow:after {
+    content: "\27A5";
+  }
+
   & > p {
     margin-bottom: 0;
   }

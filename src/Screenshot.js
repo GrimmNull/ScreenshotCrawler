@@ -29,7 +29,6 @@ export const Screenshot = () => {
         const htmlParsed = await htmlFetched.text()
         const fetchedDOM = parser.parseFromString(htmlParsed, 'text/html')
         const fetchedImage = fetchedDOM.getElementById("screenshot-image")
-
         try {
             if(!fetchedImage) {
                 setCode(generateCode())
@@ -46,7 +45,7 @@ export const Screenshot = () => {
 
     return (
         <div style={{display: "flex", flexDirection: "column"}} className="screenshotWrapper">
-            <p>Code: {code}</p>
+            <p>Code: {code} <a className="redirectArrow" href={"https://prnt.sc/" + code} target="_blank" rel="noreferrer"/></p>
             <p>Link: <a href={image} target="_blank" rel="noreferrer">{image}</a></p>
             <button onClick={() => setCode(generateCode())}>x</button>
             {link.includes("imgur") ? <img src={image} alt={""}/> :
