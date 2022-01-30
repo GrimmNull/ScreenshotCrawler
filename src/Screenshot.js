@@ -29,13 +29,13 @@ export const Screenshot = () => {
         const htmlParsed = await htmlFetched.text()
         const fetchedDOM = parser.parseFromString(htmlParsed, 'text/html')
         const fetchedImage = fetchedDOM.getElementById("screenshot-image")
-        setLink(fetchedImage.src)
+
         try {
             if(!fetchedImage) {
-                console.log("I tried fetching again")
                 setCode(generateCode())
                 return
             }
+            setLink(fetchedImage.src)
             setImage(fetchedImage.src)
         } catch (e) {
             console.log(e)
