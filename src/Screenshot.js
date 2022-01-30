@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
+import "./screenshot.scss"
 
 const parser = new DOMParser()
+const cacheResults = process.env.REACT_APP_CACHE_RESULTS === "true"
 
 export const Screenshot = () => {
     const usedCodes = []
@@ -13,7 +15,7 @@ export const Screenshot = () => {
         if (usedCodes.includes(result)) {
             return generateCode()
         } else {
-            usedCodes.push(result)
+            cacheResults && usedCodes.push(result)
             return result;
         }
     }
@@ -29,22 +31,26 @@ export const Screenshot = () => {
         const fetchedImage = fetchedDOM.getElementById("screenshot-image")
         setLink(fetchedImage.src)
         try {
-            // TODO: Check if link contains "removed"
+            if(!fetchedImage) {
+                console.log("I tried fetching again")
+                setCode(generateCode())
+                return
+            }
             setImage(fetchedImage.src)
         } catch (e) {
-            console.log()
+            console.log(e)
         }
 
     }, [code])
 
 
     return (
-        <div style={{display: "flex", flexDirection: "column"}}>
+        <div style={{display: "flex", flexDirection: "column"}} className="screenshotWrapper">
             <p>Code: {code}</p>
-            <p>Link: <a href={image} target="_blank">{image}</a></p>
+            <p>Link: <a href={image} target="_blank" rel="noreferrer">{image}</a></p>
             <button onClick={() => setCode(generateCode())}>x</button>
             {link.includes("imgur") ? <img src={image} alt={""}/> :
-            <iframe height={900} src={image} referrerPolicy="no-referrer" />}
+            <iframe src={image} title="ImageFetcher" referrerPolicy="no-referrer" />}
         </div>
     )
 }
